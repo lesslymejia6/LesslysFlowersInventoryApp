@@ -15,16 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from FlowersInventory import settings
 from django.conf.urls.static import static
-from django.urls import path, include
+from .views import home_page, inventory_page, inventory_import, data_charts, month_selection
 
-app_name = 'FlowersInventory'
+app_name = 'InvoiceImport'
 
 
 urlpatterns = [
-    path('InvoiceImport/', include('InvoiceImport.urls')),
-    path(r'^admin/', admin.site.urls),
+    url(r'^$', home_page, name='home'),
+    url(r'^inventory/', inventory_page, name='inventory'),
+    url(r'^imported/', inventory_import, name='import'),
+    url(r'^graph/', data_charts, name='graph'),
+    url(r'^selection/', month_selection, name="selection"),
+    url(r'^admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:

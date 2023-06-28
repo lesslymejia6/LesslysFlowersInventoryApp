@@ -1,1 +1,4 @@
-django
+django~=3.2.19
+
+pandas~=1.1.5
+tablib~=3.1.0
