@@ -1,0 +1,6 @@
+<form class="form-product-ajax" method="POST" action="{% url 'flowers_import_excel:selection' %}"
+      data-endpoint="{% url flowers_import_excel:selection %}"
+      class="form">
+    {% csrf_token %}
+    <input class="purchase_date_input" type="text" name="month" value="{{ invoice.purchase_date }}">
+</form>

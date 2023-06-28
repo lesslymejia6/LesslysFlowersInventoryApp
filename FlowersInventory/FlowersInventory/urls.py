@@ -18,12 +18,17 @@ from django.contrib import admin
 from FlowersInventory import settings
 from django.conf.urls.static import static
 from django.urls import path, include
-
-app_name = 'FlowersInventory'
+# from InvoiceImport.views import home_page, inventory_page, inventory_import, data_charts, month_selection
 
 
 urlpatterns = [
-    path('InvoiceImport/', include('InvoiceImport.urls')),
+
+    # path(r'^$', home_page, name='home'),
+    # path(r'^inventory/', inventory_page, name='inventory'),
+    # path(r'^imported/', inventory_import, name='import'),
+    # path(r'^graph/', data_charts, name='graph'),
+    # path(r'^selection/', month_selection, name="selection"),
+    path(r'^import/', include('InvoiceImport.urls', namespace="import")),
     path(r'^admin/', admin.site.urls),
 ]
 

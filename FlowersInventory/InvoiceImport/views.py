@@ -5,7 +5,7 @@ import pandas as pd
 from collections import Counter
 from django.core.files.storage import FileSystemStorage
 from .models import Inventory, Product, Invoice
-# from tablib import Dataset
+from tablib import Dataset
 from .resources import InvoiceResource
 from django.views.decorators.csrf import csrf_exempt
 
