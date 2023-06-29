@@ -14,20 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.contrib import admin
 from FlowersInventory import settings
 from django.conf.urls.static import static
-from .views import home_page, inventory_page, inventory_import, data_charts, month_selection
+from . import views
+# from .views import home_page, inventory_page, inventory_import, data_charts, month_selection
 
 app_name = 'InvoiceImport'
 
 
 urlpatterns = [
-    url(r'^$', home_page, name='home'),
-    url(r'^inventory/', inventory_page, name='inventory'),
-    url(r'^upload/', inventory_import, name='upload'),
-    url(r'^graph/', data_charts, name='graph'),
-    url(r'^selection/', month_selection, name="selection"),
+    url(r'^$', views.home_page, name='home'),
+    url(r'^inventory/', views.inventory_page, name='inventory'),
+    url(r'^upload/', views.inventory_import, name='upload'),
+    url(r'^graph/', views.data_charts, name='graph'),
+    url(r'^selection/', views.month_selection, name="selection"),
 ]
 
 if settings.DEBUG:

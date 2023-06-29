@@ -1,4 +1,4 @@
-import resources
+from import_export import resources
 from .models import Invoice
 
 

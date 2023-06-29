@@ -28,8 +28,8 @@ urlpatterns = [
     # path(r'^imported/', inventory_import, name='import'),
     # path(r'^graph/', data_charts, name='graph'),
     # path(r'^selection/', month_selection, name="selection"),
-    path(r'^import/', include('InvoiceImport.urls', namespace="import")),
-    path(r'^admin/', admin.site.urls),
+    path('', include('InvoiceImport.urls', namespace="import")),
+    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
