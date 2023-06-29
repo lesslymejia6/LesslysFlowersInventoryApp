@@ -23,7 +23,7 @@ def inventory_page(request):
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        empExcelData = pd.read_excel(filename)
+        empExcelData = pd.read_excel(filename, engine='openpyxl')
         dbframe = empExcelData
         for dbframe in dbframe.itertuples():
             # Check if product exists, if not create it
@@ -33,6 +33,7 @@ def inventory_page(request):
                                                  unit_type=dbframe.unit_type, total_units=dbframe.total_units,
                                                  unit_price=dbframe.unit_price, total=dbframe.total)
             invoice_obj.save()
+
             # Add product to inventory
             inventory_obj, created = Inventory.objects.get_or_create(product=product_obj)
             inventory_obj.total_units += dbframe.total_units
@@ -76,7 +77,7 @@ def month_selection(request):
 
             return JsonResponse(json_data)
 
-    return render(request, "flowers_import_excel:selection", {})
+    return render(request, "selection.html", {})
 
 
 def data_charts(request):
@@ -85,7 +86,7 @@ def data_charts(request):
     data = Counter()
     for row in inventory:
         yymm = row.product
-        data[yymm] += row.total_units
+        data[yymm] += 1
 
     labels, values = zip(*data.items())
 
