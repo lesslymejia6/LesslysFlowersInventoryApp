@@ -24,10 +24,10 @@ app_name = 'InvoiceImport'
 
 urlpatterns = [
     url(r'^$', views.home_page, name='home'),
-    url(r'^inventory/$', views.inventory_page, name='inventory'),
-    url(r'^upload/$', views.inventory_import, name='upload'),
-    url(r'^graph/$', views.data_charts, name='graph'),
-    url(r'^selection/$', views.month_selection, name="selection"),
+    url(r'^inventory/$', views.import_page, name='inventory'),
+    url(r'^upload/$', views.invoice_import, name='upload'),
+    # url(r'^graph/$', views.data_charts, name='graph'),
+    url(r'^selection/$', views.month_selection_view, name="selection"),
 ]
 
 if settings.DEBUG:
