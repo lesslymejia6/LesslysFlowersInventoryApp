@@ -1,52 +1,49 @@
 <!--{% load static %}-->
 <!DOCTYPE>
 <html lang='en'>
-    <head>
-        <meta charset='utf-8'>
-        <meta name="viewport" content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-        {% include 'base/css.html' %}
-    </head>
-    <body>
-        {% include 'base/navbar.html' with brand_name="Lessly's Flowers"%}
-        <div class="container">
-            {% block content %}
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+    {% include 'base/css.html' %}
+    <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // pulling form in
+            var monthSelectionForm = $('.month-form')
 
-            {% endblock %}
-        </div>
-        {% include 'base/js.html' %}
+            monthSelectionForm.submit(function (event) {
+                // grabbing data related to this form
+                var thisForm = $(this)
+                // the url
+                var actionEndpoint = thisForm.attr("data-endpoint")
+                // actual method - GET
+                var httpMethod = thisForm.attr("method")
+                // the form data
+                var formData = thisForm.serialize();
+                // response from database
+                var response = '';
+                $.ajax({
+                    type: "GET",
+                    url: actionEndpoint,
+                    method: httpMethod,
+                    data: formData,
 
-        <script>
-            $(document).ready(function(){
-                // form
-                var invoiceForm = $('.form-product-ajax')
-
-                invoiceForm.submit(function (event){
-                    event.preventDefault();
-                    // grabbing data related to this form
-                    var thisForm = $(this)
-                    // the url
-                    var actionEndpoint = thisForm.attr("date-endpoint");
-                    // actual method
-                    var httpMethod = thisForm.attr("method");
-                    // the form data
-                    var formData = thisForm.serialize();
-
-                    $.ajax({
-                        url: actionEndpoint,
-                        method: httpMethod,
-                        data: formData,
-
-                        success: function (data) {
-                            var input = thisForm.find(".purchase_date_input")
-                            if (data.added) {
-                                input.html("found")
-                            } else {
-                                input.html("not found")
-                            }
-                        }
-                    })
+                    success: function (data) {
+                        console.log(data);
+                    }
                 })
             })
-        </script>
-    </body>
+        });
+    </script>
+</head>
+<body>
+{% include 'base/navbar.html' with brand_name="Lessly's Flowers"%}
+<div class="container">
+    {% block content %}
+
+    {% endblock %}
+</div>
+{% include 'base/js.html' %}
+</body>
 </html>
