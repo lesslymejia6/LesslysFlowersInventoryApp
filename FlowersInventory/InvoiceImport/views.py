@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 import pandas as pd
+from django.views.generic.list import ListView
 from collections import Counter
 from django.core.files.storage import FileSystemStorage
 from .models import Inventory, Product, Invoice
@@ -17,7 +18,7 @@ def home_page(request):
     return render(request, "home.html", context)
 
 
-def inventory_page(request):
+def import_page(request):
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
         fs = FileSystemStorage()
@@ -43,10 +44,10 @@ def inventory_page(request):
             'uploaded_file_url': uploaded_file_url,
         }
         return render(request, "import_success.html", context)
-    return render(request, 'inventory.html', {})
+    return render(request, 'import_view.html', {})
 
 
-def inventory_import(request):
+def invoice_import(request):
     if request.method == 'POST':
         InvoiceResource()
         dataset = Dataset()
@@ -58,41 +59,15 @@ def inventory_import(request):
     return render(request, 'import_success.html', {})
 
 
-@csrf_exempt
-def month_selection(request):
-    purchase_date = request.POST.get('purchase_date')
-
-    if purchase_date is not None:
-        print("got it")
-        found = True
-    else:
-        print("try again!")
-        found = False
-
-        if request.is_ajax():
-            print("ajax request")
-            json_data = {
-                "found": found,
-            }
-
-            return JsonResponse(json_data)
-
-    return render(request, "selection.html", {})
-
-
-def data_charts(request):
-    inventory = Inventory.objects.order_by('product')
-
-    data = Counter()
-    for row in inventory:
-        yymm = row.product
-        data[yymm] += 1
-
-    labels, values = zip(*data.items())
-
-    context = {
-        "labels": labels,
-        "values": values,
-    }
-
-    return render(request, "graph.html", context)
+def month_selection_view(request):
+    # queryset = Invoice.objects.all()
+    #
+    # context = {
+    #     'invoice_list': queryset
+    # }
+    # # if request.method == 'GET':
+    # #     invoices = ListView(Invoice.objects.get(name=Invoice.products))
+    # #     return JsonResponse({'context': invoices})
+    # # else:
+    # #     return JsonResponse({'status': 'INVALID!'})
+    return render(request, "month_selection_view.html", context)
