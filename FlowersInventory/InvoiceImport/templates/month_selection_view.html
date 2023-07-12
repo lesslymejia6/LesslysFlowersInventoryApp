@@ -4,8 +4,14 @@
 {% block content %}
     <p>Select a Month:</p>
 <!-- form -->
-    {% include 'forms/month_selection.html' %}
+    {% include 'forms/month_selection.html'  %}
 
-    {{ invoice_list }}
+    {% if invoices.exists %}
+        {% for invoice in invoices.all %}
+            {{invoice}}
+        {% endfor %}
+    {% else %}
+        <p>There are no invoices for this month</p>
+    {% endif %}
 
 {% endblock %}
