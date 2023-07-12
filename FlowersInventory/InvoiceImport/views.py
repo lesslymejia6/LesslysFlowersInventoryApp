@@ -31,8 +31,7 @@ def import_page(request):
             product_obj, created = Product.objects.get_or_create(name=dbframe.name, unit_price=dbframe.unit_price)
             # Create invoice for record keeping
             invoice_obj = Invoice.objects.create(product=product_obj, purchase_date=dbframe.purchase_date,
-                                                 unit_type=dbframe.unit_type, total_units=dbframe.total_units,
-                                                 unit_price=dbframe.unit_price, total=dbframe.total)
+                                                 total=dbframe.total)
             invoice_obj.save()
 
             # Add product to inventory
@@ -60,7 +59,15 @@ def invoice_import(request):
 
 
 def month_selection_view(request):
-    # queryset = Invoice.objects.all()
+    month_integer = request.GET.get('month')
+    month_integer = int(month_integer)
+    # filter by the month
+    invoices_qs = Invoice.objects.filter(
+        purchase_date__month__lte=month_integer,
+        purchase_date__month__gte=month_integer
+    )
+
+
     #
     # context = {
     #     'invoice_list': queryset
@@ -70,4 +77,4 @@ def month_selection_view(request):
     # #     return JsonResponse({'context': invoices})
     # # else:
     # #     return JsonResponse({'status': 'INVALID!'})
-    return render(request, "month_selection_view.html", context)
+    return render(request, "month_selection_view.html", {'invoices': invoices_qs})
