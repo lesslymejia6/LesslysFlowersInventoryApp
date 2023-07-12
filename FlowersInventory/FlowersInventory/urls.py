@@ -28,7 +28,7 @@ urlpatterns = [
     # path(r'^imported/', inventory_import, name='import'),
     # path(r'^graph/', data_charts, name='graph'),
     # path(r'^selection/', month_selection, name="selection"),
-    url(r'^import/', include('InvoiceImport.urls', namespace="import")),
+    url(r'^', include('InvoiceImport.urls', namespace="import")),
     url(r'^admin/', admin.site.urls),
 ]
 
