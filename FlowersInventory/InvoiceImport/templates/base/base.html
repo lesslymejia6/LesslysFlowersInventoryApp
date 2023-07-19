@@ -5,37 +5,7 @@
     <meta charset='utf-8'>
     <meta name="viewport" content='width=device-width, initial-scale=1, shrink-to-fit=no'>
     {% include 'base/css.html' %}
-    <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // pulling form in
-            var monthSelectionForm = $('.month-form')
 
-            monthSelectionForm.submit(function (event) {
-                // grabbing data related to this form
-                var thisForm = $(this)
-                // the url
-                var actionEndpoint = thisForm.attr("data-endpoint")
-                // actual method - GET
-                var httpMethod = thisForm.attr("method")
-                // the form data
-                var formData = thisForm.serialize();
-                // response from database
-                var response = '';
-                $.ajax({
-                    type: "GET",
-                    url: actionEndpoint,
-                    method: httpMethod,
-                    data: formData,
-
-                    success: function (data) {
-                        console.log({data});
-                    }
-                })
-            })
-        });
-    </script>
 </head>
 <body>
 {% include 'base/navbar.html' with brand_name="Lessly's Flowers"%}
@@ -45,5 +15,9 @@
     {% endblock %}
 </div>
 {% include 'base/js.html' %}
+<script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="javaScript/invoice_view.js"></script>
+<script src="javaScript/invoices_product_view.js"></script>
 </body>
 </html>

@@ -27,7 +27,9 @@ urlpatterns = [
     url(r'^inventory/$', views.import_page, name='inventory'),
     url(r'^upload/$', views.invoice_import, name='upload'),
     # url(r'^graph/$', views.data_charts, name='graph'),
-    url(r'^selection/$', views.month_selection_view, name="selection"),
+    url(r'^invoices/$', views.invoices_view, name="invoices"),
+    url(r'^invoices/products/$', views.invoices_products_view, name='invoices_products')
+
 ]
 
 if settings.DEBUG:

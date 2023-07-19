@@ -1,0 +1,14 @@
+<div>
+    <form class="invoices-products-form" method="GET" action='{% url "import:invoices_products" %}'
+          data-endpoint='{% url "import:invoices_products" %}'
+          class="form">
+        {% csrf_token %}
+        <!--// set up button for each invoice-->
+        <span class="submit-span">
+                     <label for="invoice_input"> {{invoice}}</label>
+                    <input id="invoice_input" type="hidden" name="invoice_id" value="{{ invoice.id }}">
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </span>
+    </form>
+</div>Ò

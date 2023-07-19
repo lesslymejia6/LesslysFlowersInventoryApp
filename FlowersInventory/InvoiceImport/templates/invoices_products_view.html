@@ -1,0 +1,18 @@
+{% extends "base/base.html" %}
+
+
+{% block content %}
+    <p>Enter Invoice ID :</p>
+
+    {% include 'forms/invoices_products_form.html'  %}
+
+    <div>
+        {{ invoice_id }}
+    </div>
+
+    {% for invoice_product in invoice_products %}
+        {{ invoice_product.product }}
+    {%  endfor %}
+
+
+{% endblock %}

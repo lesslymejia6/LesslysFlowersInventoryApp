@@ -4,11 +4,14 @@
 {% block content %}
     <p>Select a Month:</p>
 <!-- form -->
-    {% include 'forms/month_selection.html'  %}
+    {% include 'forms/invoice_form.html'  %}
 
     {% if invoices.exists %}
+
         {% for invoice in invoices.all %}
-            {{invoice}}
+            <div>
+                 {%  include 'forms/invoice_product_form.html' with product=object cart=cart %}
+            </div>
         {% endfor %}
     {% else %}
         <p>There are no invoices for this month</p>

@@ -4,7 +4,7 @@ import pandas as pd
 from django.views.generic.list import ListView
 from collections import Counter
 from django.core.files.storage import FileSystemStorage
-from .models import Inventory, Product, Invoice
+from .models import Inventory, Product, Invoice,InvoiceProducts
 from tablib import Dataset
 from .resources import InvoiceResource
 from django.views.decorators.csrf import csrf_exempt
@@ -28,7 +28,8 @@ def import_page(request):
         dbframe = empExcelData
         for dbframe in dbframe.itertuples():
             # Check if product exists, if not create it
-            product_obj, created = Product.objects.get_or_create(name=dbframe.name, unit_price=dbframe.unit_price)
+            product_obj, created = Product.objects.get_or_create(name=dbframe.name, quantity=dbframe.quantity,
+                                                                 unit_price=dbframe.unit_price)
             # Create invoice for record keeping
             invoice_obj = Invoice.objects.create(product=product_obj, purchase_date=dbframe.purchase_date,
                                                  total=dbframe.total)
@@ -58,23 +59,52 @@ def invoice_import(request):
     return render(request, 'import_success.html', {})
 
 
-def month_selection_view(request):
-    month_integer = request.GET.get('month')
-    month_integer = int(month_integer)
-    # filter by the month
-    invoices_qs = Invoice.objects.filter(
-        purchase_date__month__lte=month_integer,
-        purchase_date__month__gte=month_integer
-    )
+def invoices_view(request):
+    month_str = request.GET.get('month', None)
+    year_str = request.GET.get('year', None)
+    if month_str is not None:
+        print(type(month_str))
+        month_int = int(month_str)
+        print(type(month_int))
+
+        # filter by the month
+        invoices_qs = Invoice.objects.filter(
+            purchase_date__month__lte=month_int,
+            purchase_date__month__gte=month_int
+        )
+
+    elif year_str is not None:
+        print(type(month_str))
+        month_int = int(month_str)
+        print(type(month_int))
+
+        # filter by the month
+        invoices_qs = Invoice.objects.filter(
+            purchase_date__year__lte=month_int,
+            purchase_date__year__gte=month_int
+        )
+    else:
+        invoices_qs = Invoice.objects.none()
+
+    return render(request, "invoices_view.html", {'invoices': invoices_qs})
 
 
-    #
-    # context = {
-    #     'invoice_list': queryset
-    # }
-    # # if request.method == 'GET':
-    # #     invoices = ListView(Invoice.objects.get(name=Invoice.products))
-    # #     return JsonResponse({'context': invoices})
-    # # else:
-    # #     return JsonResponse({'status': 'INVALID!'})
-    return render(request, "month_selection_view.html", {'invoices': invoices_qs})
+def invoices_products_view(request):
+    invoice_id = request.GET.get('invoice_id', None)
+
+    if invoice_id is not None:
+
+        # invoice_id = Invoice.objects.filter(id=invoice_id)
+
+        invoice_products = InvoiceProducts.objects.filter(invoice_id=invoice_id)
+
+    else:
+        invoice_products = InvoiceProducts.objects.none()
+
+    context = {
+        'invoice_id': invoice_id,
+        'invoice_products': invoice_products
+    }
+
+    # SET UP VIEWS AND MANIPULATE DATA
+    return render(request, "invoices_view.html", context)

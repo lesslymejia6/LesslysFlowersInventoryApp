@@ -7,9 +7,8 @@ UNIT_TYPE_CHOICES = (
 
 
 class Invoice(models.Model):
-    products = models.ManyToManyField("InvoiceImport.Product", through="InvoiceProducts")
     purchase_date = models.DateField(auto_now=False, auto_now_add=False)
-    total = models.DecimalField(max_digits=5, decimal_places=2)
+    total = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

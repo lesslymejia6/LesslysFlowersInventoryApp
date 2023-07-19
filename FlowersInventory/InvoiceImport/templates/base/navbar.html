@@ -1,7 +1,9 @@
 {% url 'import:home' as home_url %}
 {% url 'import:inventory' as import_url %}
 {% url 'import:graph' as graph_url %}
-{% url 'import:selection' as month_selection_url %}
+{% url 'import:invoices' as invoices_url %}
+{% url 'import:invoices_products' as invoices_products_url %}
+
 {% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
@@ -25,11 +27,11 @@
       <li class="nav-item {% if request.path == import_url %} active {% endif %}">
         <a class="nav-link" href="{{ import_url }}">Import</a>
       </li>
-<!--      <li class="nav-item {% if request.path == graph_url %} active {% endif %}">-->
-<!--        <a class="nav-link" href="{{ graph_url }}">Graph</a>-->
-<!--      </li>-->
-      <li class="nav-item {% if request.path == month_selection_url %} active {% endif %}">
-        <a class="nav-link" href="{{ month_selection_url }}">View Data</a>
+      <li class="nav-item {% if request.path == invoices_url %} active {% endif %}">
+        <a class="nav-link" href="{{ invoices_url }}">View Data</a>
+      </li>
+      <li class="nav-item {% if request.path == invoices_products_url %} active {% endif %}">
+        <a class="nav-link" href="{{ invoices_products_url }}">Invoices - Products</a>
       </li>
     </ul>
    </div>
