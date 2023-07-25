@@ -1,7 +1,7 @@
 <form class="invoice-form" method="GET" action='{% url "import:invoices" %}' data-endpoint='{% url "import:invoices" %}'
       class="form" name="invoiceForm">
     {% csrf_token %}
-    <select name="monthSelect" onchange="showMonthInvoice()">
+    <select name="monthSelect">
         <option value="1">January</option>
         <option value="2">February</option>
         <option value="3">March</option>
@@ -18,9 +18,6 @@
     <input type="submit" name="submit" value='Submit'>
 </form>
 
-<p id="pF"></p>
-<p id="pS"></p>
-<p id="pT"></p>
 
 
 

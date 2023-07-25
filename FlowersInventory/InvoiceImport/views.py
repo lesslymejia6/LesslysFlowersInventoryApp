@@ -38,10 +38,18 @@ def import_page(request):
                                                                  unit_price=dbframe.unit_price)
 
             # Add product to inventory
-            inventory_obj, created = Inventory.objects.get_or_create(product=product_obj,
-                                                                     total_units=dbframe.total_units)
+            inventory_obj, created = Inventory.objects.get_or_create(product=product_obj)
             inventory_obj.total_units += dbframe.total_units
             inventory_obj.save()
+
+            # updating InvoiceProducts model
+            total_units = dbframe.total_units
+            invoice_product = InvoiceProducts(
+                product=product_obj,
+                invoice=invoice_obj,
+                total_units=total_units
+            )
+            invoice_product.save()
 
         context = {
             'uploaded_file_url': uploaded_file_url,
@@ -63,8 +71,7 @@ def invoice_import(request):
 
 
 def invoices_view(request):
-    month_str = request.GET.get('month', None)
-    year_str = request.GET.get('year', None)
+    month_str = request.GET.get('monthSelect', None)
     if month_str is not None:
         print(type(month_str))
         month_int = int(month_str)
@@ -74,17 +81,6 @@ def invoices_view(request):
         invoices_qs = Invoice.objects.filter(
             purchase_date__month__lte=month_int,
             purchase_date__month__gte=month_int
-        )
-
-    elif year_str is not None:
-        print(type(month_str))
-        month_int = int(month_str)
-        print(type(month_int))
-
-        # filter by the month
-        invoices_qs = Invoice.objects.filter(
-            purchase_date__year__lte=month_int,
-            purchase_date__year__gte=month_int
         )
     else:
         invoices_qs = Invoice.objects.none()

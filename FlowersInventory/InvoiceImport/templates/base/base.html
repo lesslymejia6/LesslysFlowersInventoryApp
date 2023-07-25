@@ -12,25 +12,14 @@
 <div class="container">
     {% block content %}
 
-    {% endblock %}</div>
+    {% endblock %}
+</div>
 {% include 'base/js.html' %}
 <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <!--<script src="javaScript/invoice_view.js"></script>-->
 <!--<script src="javaScript/invoices_product_view.js"></script>-->
-<script>
-    function showMonthInvoice() {
-        var form = $('.invoice-form')
-        var invoiceForm = form.monthSelect;
-        var pF = document.getElementById('pF');
-        var pS = document.getElementById('pS');
-        var pT = document.getElementById('pT');
 
-        pF.innerHTML = ('Selected option index: ' + invoiceForm.selectedIndex);
-        pS.innerHTML = ('Selected value: ' + invoiceForm[invoiceForm.selectedIndex].value);
-        pT.innerHTML = ('Selected text: ' + invoiceForm[invoiceForm.selectedIndex].text);
-    }
-</script>
 <script>
     $(document).ready(function () {
         // pulling form in
@@ -55,7 +44,9 @@
                 data: formData,
 
                 success: function (data) {
+                    var submitSpan = thisForm.find(".submit-span ")
                     console.log({data});
+                    console.log("inside success")
                 }
             })
         })
