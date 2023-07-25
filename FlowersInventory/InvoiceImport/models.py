@@ -8,7 +8,7 @@ UNIT_TYPE_CHOICES = (
 
 class Invoice(models.Model):
     purchase_date = models.DateField(auto_now=False, auto_now_add=False)
-    total = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    invoice_total = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
