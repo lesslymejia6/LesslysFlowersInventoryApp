@@ -26,17 +26,20 @@ def import_page(request):
         uploaded_file_url = fs.url(filename)
         empExcelData = pd.read_excel(filename, engine='openpyxl')
         dbframe = empExcelData
+
+        # Create invoice for record keeping
+        invoice_obj = Invoice.objects.create(purchase_date=dbframe.purchase_date[0],
+                                             invoice_total=dbframe.invoice_total[0])
+        invoice_obj.save()
+
         for dbframe in dbframe.itertuples():
             # Check if product exists, if not create it
-            product_obj, created = Product.objects.get_or_create(name=dbframe.name, quantity=dbframe.quantity,
+            product_obj, created = Product.objects.get_or_create(name=dbframe.name, unit_type=dbframe.unit_type,
                                                                  unit_price=dbframe.unit_price)
-            # Create invoice for record keeping
-            invoice_obj = Invoice.objects.create(product=product_obj, purchase_date=dbframe.purchase_date,
-                                                 total=dbframe.total)
-            invoice_obj.save()
 
             # Add product to inventory
-            inventory_obj, created = Inventory.objects.get_or_create(product=product_obj)
+            inventory_obj, created = Inventory.objects.get_or_create(product=product_obj,
+                                                                     total_units=dbframe.total_units)
             inventory_obj.total_units += dbframe.total_units
             inventory_obj.save()
 
