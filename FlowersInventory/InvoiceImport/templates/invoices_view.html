@@ -9,10 +9,8 @@
     {% if invoices.exists %}
 
         {% for invoice in invoices.all %}
-            {{ invoices.purchase_date }}
-            <div>
-                 {%  include 'forms/invoice_product_form.html' with product=object cart=cart %}
-            </div>
+            {{ invoice.purchase_date }}
+            {%  include 'forms/invoices_products_form.html' %}
         {% endfor %}
     {% else %}
         <p>There are no invoices for this month</p>
