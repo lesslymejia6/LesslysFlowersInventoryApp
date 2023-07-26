@@ -4,7 +4,7 @@ import pandas as pd
 from django.views.generic.list import ListView
 from collections import Counter
 from django.core.files.storage import FileSystemStorage
-from .models import Inventory, Product, Invoice,InvoiceProducts
+from .models import Inventory, Product, Invoice, InvoiceProducts
 from tablib import Dataset
 from .resources import InvoiceResource
 from django.views.decorators.csrf import csrf_exempt
@@ -90,20 +90,21 @@ def invoices_view(request):
 
 def invoices_products_view(request):
     invoice_id = request.GET.get('invoice_id', None)
+    print(invoice_id)
 
     if invoice_id is not None:
 
-        # invoice_id = Invoice.objects.filter(id=invoice_id)
+        invoice_product = InvoiceProducts.objects.filter(id=invoice_id)
 
-        invoice_products = InvoiceProducts.objects.filter(invoice_id=invoice_id)
+        print(invoice_product)
 
     else:
-        invoice_products = InvoiceProducts.objects.none()
+        invoice_product = InvoiceProducts.objects.none()
 
     context = {
         'invoice_id': invoice_id,
-        'invoice_products': invoice_products
+        'invoice_product': invoice_product
     }
 
     # SET UP VIEWS AND MANIPULATE DATA
-    return render(request, "invoices_view.html", context)
+    return render(request, "invoice_product_view.html", context)
