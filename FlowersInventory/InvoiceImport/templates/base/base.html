@@ -22,12 +22,12 @@
 
 <script>
     $(document).ready(function () {
-        // pulling form in
+        // pulling 'invoice-form' in
         var invoiceForm = $('.invoice-form')
         console.log('inside .ready')
 
         invoiceForm.submit(function (event) {
-            console.log('inside submit function')
+            console.log('inside invoiceForm submit function')
             // grabbing data related to this form
             var thisForm = $(this)
             // the url
@@ -44,9 +44,42 @@
                 data: formData,
 
                 success: function (data) {
-                    var submitSpan = thisForm.find(".submit-span ")
                     console.log({data});
-                    console.log("inside success")
+                    console.log("inside invoiceForm success")
+                }
+            })
+        })
+
+        // pulling 'invoices-products-form' in
+        var invoiceProductForm = $('.invoices-products-form')
+        console.log('listing to invoiceProductForm')
+
+        invoiceProductForm.submit(function (event) {
+            console.log('inside invoiceProductForm function')
+
+            var thisForm = $(this)
+            var actionEndpoint = thisForm.attr('data-endpoint')
+            var httpMethod = thisForm.attr('method')
+            var formData = thisForm.serialize();
+
+            $.ajax({
+                type: "GET",
+                url: actionEndpoint,
+                data: formData,
+
+                success: function (data) {
+                    var submitSpan = thisForm.find(".submit-span")
+                    if (data) {
+                        submitSpan.html('Found data')
+                    } else {
+                        submitSpan.html('no data')
+                    }
+                    console.log({data})
+                    console.log(' inside invoiceProductForm success ')
+                },
+                error: function (errorData) {
+                    console.log("error")
+                    console.log(errorData)
                 }
             })
         })
