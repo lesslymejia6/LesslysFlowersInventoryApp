@@ -1,0 +1,41 @@
+{% extends "base/base.html" %}
+
+
+{% block content %}
+<p>Invoice: </p> {{ invoice.purchase_date}}
+<div class="div-scroll">
+ <table border="5px" align="center">
+    <tr>
+        <th> Name:</th>
+        <th> Type:</th>
+        <th> Unit Price:</th>
+    </tr>
+    {% for invoice_product in invoices_products %}
+    <tr>
+        <td> {{ invoice_product.product.name }}</td>
+        <td> {{ invoice_product.product.unit_type }}</td>
+        <td> {{ invoice_product.product.unit_price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+
+
+
+
+<h4> TOTAL: </h4>
+{{invoice.invoice_total}}
+<!--        {% for product_inventory_entry in product_inventory %}-->
+<!--            {{ product_inventory_entry}}-->
+<!--            {{ product_inventory_entry.product}}-->
+<!--            {{ product_inventory_entry.total_units}}-->
+<!--        {% endfor %}-->
+
+<!--    {{ invoice_id }}-->
+
+<!--    {% for invoice_product in invoices_products %}-->
+<!--        {{ invoice_product.id}}-->
+<!--    {%  endfor %}-->
+
+{% endblock %}
