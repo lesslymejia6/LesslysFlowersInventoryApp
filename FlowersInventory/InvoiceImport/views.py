@@ -90,21 +90,42 @@ def invoices_view(request):
 
 def invoices_products_view(request):
     invoice_id = request.GET.get('invoice_id', None)
-    print(invoice_id)
+    invoice = Invoice.objects.get(id=invoice_id)
 
+    # product_inventory = []
     if invoice_id is not None:
 
-        invoice_product = InvoiceProducts.objects.filter(id=invoice_id)
-
-        print(invoice_product)
+        invoices_products = InvoiceProducts.objects.filter(invoice_id=invoice_id)
 
     else:
-        invoice_product = InvoiceProducts.objects.none()
+        invoices_products = InvoiceProducts.objects.none()
 
+    # print(product_inventory)
     context = {
-        'invoice_id': invoice_id,
-        'invoice_product': invoice_product
+        'invoice': invoice,
+        'invoices_products': invoices_products,
+        # 'product_inventory': product_inventory
     }
 
     # SET UP VIEWS AND MANIPULATE DATA
     return render(request, "invoice_product_view.html", context)
+
+
+def inventory(request):
+    products = Inventory.objects.all()
+    # MAYBE THIS CAN BE ITS OWN VIEW -- HOW MANY DO I HAVE OF ____?
+    # invoice_id = request.GET.get('invoice_id', None)
+    # product_inventory = []
+    # invoices_products = InvoiceProducts.objects.filter(invoice_id=invoice_id)
+    #
+    # for invoices_product in invoices_products:
+    #     product = invoices_product.product
+    #     product_inventory_entry = Inventory.objects.get(product=product)
+    #     product_inventory.append(product_inventory_entry)
+
+    context = {
+        # 'product_inventory': product_inventory,
+        'products': products
+    }
+
+    return render(request, "inventory_view.html", context)
