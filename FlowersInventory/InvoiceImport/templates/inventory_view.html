@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+
+
+{% block content %}
+
+<table border="5px" align="center">
+    <tr>
+        <th> Name:</th>
+        <th> Total Units:</th>
+    </tr>
+    {% for product in products %}
+    <tr>
+        <td> {{ product.product.name }}</td>
+        <td> {{ product.total_units}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+
+{% endblock %}
