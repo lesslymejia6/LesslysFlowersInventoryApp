@@ -24,26 +24,33 @@ def import_page(request):
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        empExcelData = pd.read_excel(filename, engine='openpyxl')
-        dbframe = empExcelData
+        dataframe = pd.read_excel(filename, engine='openpyxl')
 
         # Create invoice for record keeping
-        invoice_obj = Invoice.objects.create(purchase_date=dbframe.purchase_date[0],
-                                             invoice_total=dbframe.invoice_total[0])
+        invoice_obj = Invoice.objects.create(purchase_date=dataframe.purchase_date[0],
+                                             invoice_total=dataframe.invoice_total[0])
         invoice_obj.save()
 
-        for dbframe in dbframe.itertuples():
+        #
+        for dataframe_row in dataframe.itertuples():
+            # checks for empty cells in each dataframe_row
+            if (pd.isnull(dataframe_row.name)) or \
+                    (pd.isnull(dataframe_row.unit_type)) or \
+                    (pd.isnull(dataframe_row.unit_price)):
+                continue
+
             # Check if product exists, if not create it
-            product_obj, created = Product.objects.get_or_create(name=dbframe.name, unit_type=dbframe.unit_type,
-                                                                 unit_price=dbframe.unit_price)
+            product_obj, created = Product.objects.get_or_create(name=dataframe_row.name,
+                                                                 unit_type=dataframe_row.unit_type,
+                                                                 unit_price=dataframe_row.unit_price)
 
             # Add product to inventory
             inventory_obj, created = Inventory.objects.get_or_create(product=product_obj)
-            inventory_obj.total_units += dbframe.total_units
+            inventory_obj.total_units += dataframe_row.total_units
             inventory_obj.save()
 
             # updating InvoiceProducts model
-            total_units = dbframe.total_units
+            total_units = dataframe_row.total_units
             invoice_product = InvoiceProducts(
                 product=product_obj,
                 invoice=invoice_obj,
@@ -55,6 +62,7 @@ def import_page(request):
             'uploaded_file_url': uploaded_file_url,
         }
         return render(request, "import_success.html", context)
+
     return render(request, 'import_view.html', {})
 
 
