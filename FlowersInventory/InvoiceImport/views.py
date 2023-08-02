@@ -1,13 +1,12 @@
-from django.http import JsonResponse
+import json
+
 from django.shortcuts import render
 import pandas as pd
-from django.views.generic.list import ListView
-from collections import Counter
 from django.core.files.storage import FileSystemStorage
 from .models import Inventory, Product, Invoice, InvoiceProducts
 from tablib import Dataset
 from .resources import InvoiceResource
-from django.views.decorators.csrf import csrf_exempt
+from collections import Counter
 
 
 def home_page(request):
@@ -119,17 +118,8 @@ def invoices_products_view(request):
     return render(request, "invoice_product_view.html", context)
 
 
-def inventory(request):
+def inventory_view(request):
     products = Inventory.objects.all()
-    # MAYBE THIS CAN BE ITS OWN VIEW -- HOW MANY DO I HAVE OF ____?
-    # invoice_id = request.GET.get('invoice_id', None)
-    # product_inventory = []
-    # invoices_products = InvoiceProducts.objects.filter(invoice_id=invoice_id)
-    #
-    # for invoices_product in invoices_products:
-    #     product = invoices_product.product
-    #     product_inventory_entry = Inventory.objects.get(product=product)
-    #     product_inventory.append(product_inventory_entry)
 
     context = {
         # 'product_inventory': product_inventory,
@@ -137,3 +127,32 @@ def inventory(request):
     }
 
     return render(request, "inventory_view.html", context)
+
+
+def inventory_graph(request):
+    labels = []
+    data = []
+
+    queryset = Inventory.objects.order_by('total_units')
+
+    for inventory in queryset:
+        labels.append(inventory.product.name)
+        data.append(inventory.total_units)
+
+    print(labels)
+    print(data)
+
+    context = {
+        "labels": json.dumps(labels),
+        "data": json.dumps(data),
+    }
+    return render(request, "inventory_graph.html", context)
+
+
+def inventory_update(request):
+    inventory = Inventory.objects.all()
+
+    context = {
+        'inventory': inventory
+    }
+    return render(request, "inventory_update_view.html",  context)
