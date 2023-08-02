@@ -29,7 +29,9 @@ urlpatterns = [
     # url(r'^graph/$', views.data_charts, name='graph'),
     url(r'^invoices/$', views.invoices_view, name="invoices"),
     url(r'^invoices/products/$', views.invoices_products_view, name='invoice_product'),
-    url(r'^invoices/inventory/$', views.inventory, name='inventory')
+    url(r'^inventory/$', views.inventory_view, name='inventory'),
+    url(r'^inventory/graph/$', views.inventory_graph, name='inventory_graph'),
+    url(r'^inventory/update/$', views.inventory_update, name='inventory_update'),
 
 ]
 
