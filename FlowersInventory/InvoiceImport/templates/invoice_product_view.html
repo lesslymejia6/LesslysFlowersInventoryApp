@@ -20,22 +20,9 @@
 </table>
 </div>
 
-
-
-
-
 <h4> TOTAL: </h4>
 {{invoice.invoice_total}}
-<!--        {% for product_inventory_entry in product_inventory %}-->
-<!--            {{ product_inventory_entry}}-->
-<!--            {{ product_inventory_entry.product}}-->
-<!--            {{ product_inventory_entry.total_units}}-->
-<!--        {% endfor %}-->
 
-<!--    {{ invoice_id }}-->
-
-<!--    {% for invoice_product in invoices_products %}-->
-<!--        {{ invoice_product.id}}-->
-<!--    {%  endfor %}-->
+{% include 'forms/back_invoices_products_form.html'  %}
 
 {% endblock %}
