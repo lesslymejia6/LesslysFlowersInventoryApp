@@ -4,7 +4,7 @@
 {% url 'import:invoices' as invoices_url %}
 {% url 'import:invoices_products' as invoices_products_url %}
 {% url 'import:inventory' as inventory_url %}
-{% url 'import:inventory_graph' as inventory_graph_url %}
+{% url 'import:inventory_update' as inventory_update_url %}
 
 {% load static %}
 
@@ -32,14 +32,11 @@
       <li class="nav-item {% if request.path == invoices_url %} active {% endif %}">
         <a class="nav-link" href="{{ invoices_url }}">Invoice Search</a>
       </li>
-      <li class="nav-item {% if request.path == invoices_products_url %} active {% endif %}">
-        <a class="nav-link" href="{{ invoices_products_url }}">Products</a>
-      </li>
       <li class="nav-item {% if request.path == inventory_url %} active {% endif %}">
         <a class="nav-link" href="{{ inventory_url }}"> Inventory </a>
       </li>
-      <li class="nav-item {% if request.path == inventory_graph_url %} active {% endif %}">
-        <a class="nav-link" href="{{ inventory_graph_url }}"> Inventory Graph </a>
+      <li class="nav-item {% if request.path == inventory_update_url %} active {% endif %}">
+        <a class="nav-link" href="{{ inventory_update_url }}"> Update </a>
       </li>
     </ul>
    </div>
