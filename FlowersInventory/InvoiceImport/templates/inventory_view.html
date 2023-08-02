@@ -2,7 +2,6 @@
 
 
 {% block content %}
-
 <table border="5px" align="center">
     <tr>
         <th> Name:</th>
@@ -16,7 +15,8 @@
     {% endfor %}
 </table>
 
-
-
+<div align="center" style="padding:25px">
+    {% include 'forms/inventory_graph_form.html' %}
+</div>
 
 {% endblock %}
