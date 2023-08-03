@@ -82,24 +82,26 @@
         })
 
         // on click function for updating inventory quantities
-        var inventoryUpdateForm = $('.inventory-update-form')
+        var selectProductToUpdateForm = $('.select_product_to_update_form')
         console.log('got form')
-        inventoryUpdateForm.onclick = function () {
-            // console.log('inside invoiceProductForm function')
-            //
-            // var thisForm = $(this)
-            // var actionEndpoint = thisForm.attr('data-endpoint')
-            // var httpMethod = thisForm.attr('method')
-            // var formData = thisForm.serialize();
 
-            updateInventoryQuantities ()
-            console.log('inside onclick function')
+        document.getElementById("update-button").onclick = function () {
+            selectProductToUpdate()
+            // event.preventDefault()
+
+
         };
 
-        function updateInventoryQuantities () {
-            console.log('inside updateInventoryQuantities function')
-            document.getElementById("update-button").innerHTML = "HOW MUCH DID YOU USE? ";
+        function selectProductToUpdate(event) {
+            event.preventDefault()
+
+            document.getElementById("update-button").innerHTML = "LET'S DO IT!! ENTER NEW VALUE";
+            document.getElementsByTagName("body")[0].style.color = "white";
+            document.getElementsByTagName("body")[0].style.backgroundColor = "pink";
+            document.getElementById("update-button").style.border = "4px yellow";
+
         }
+
     });
 </script>
 </body>
