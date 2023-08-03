@@ -156,3 +156,5 @@ def inventory_update(request):
         'inventory': inventory
     }
     return render(request, "inventory_update_view.html",  context)
+
+
