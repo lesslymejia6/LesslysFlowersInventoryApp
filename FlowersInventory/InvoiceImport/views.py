@@ -19,18 +19,19 @@ def home_page(request):
 
 def import_page(request):
     if request.method == 'POST' and request.FILES['myfile']:
+
         myfile = request.FILES['myfile']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
         dataframe = pd.read_excel(filename, engine='openpyxl')
 
-        # Create invoice for record keeping
+
         invoice_obj = Invoice.objects.create(purchase_date=dataframe.purchase_date[0],
                                              invoice_total=dataframe.invoice_total[0])
+
         invoice_obj.save()
 
-        #
         for dataframe_row in dataframe.itertuples():
             # checks for empty cells in each dataframe_row
             if (pd.isnull(dataframe_row.name)) or \
@@ -149,12 +150,23 @@ def inventory_graph(request):
     return render(request, "inventory_graph.html", context)
 
 
-def inventory_update(request):
-    inventory = Inventory.objects.all()
+def select_product_to_update(request):
+    print(request.body)
+    inventory_queryset = Inventory.objects.all()
+    used_inventory = request.POST.get('usedInventory', None)
+    inventory_id = request.POST.get('inventoryId', None)
+    if inventory_id and used_inventory:
+        inventory_instance = Inventory.objects.get(id=inventory_id)
+        total_units_available = inventory_instance.total_units
+        # Check if inventory has enough else raise exception
+        if total_units_available > int(used_inventory):
+            inventory_instance.total_units = inventory_instance.total_units - int(used_inventory)
+        else:
+            raise ValueError("Not enough inventory to use")
+
+        inventory_instance.save()
 
     context = {
-        'inventory': inventory
+        'inventory_queryset': inventory_queryset
     }
-    return render(request, "inventory_update_view.html",  context)
-
-
+    return render(request, "inventory_update_view.html", context)
