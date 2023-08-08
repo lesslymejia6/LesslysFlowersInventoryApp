@@ -2,6 +2,6 @@
       data-endpoint='{% url "import:invoices" %}'>
     {% csrf_token %}
     <div style="padding: 10px">
-        <button type="submit" class="btn btn-warning">Back</button>
+        <button onclick="history.back()" class="btn btn-warning"> Back </button>
     </div>
 </form>
