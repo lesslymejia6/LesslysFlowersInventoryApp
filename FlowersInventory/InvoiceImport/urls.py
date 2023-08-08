@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^invoices/products/$', views.invoices_products_view, name='invoice_product'),
     url(r'^inventory/$', views.inventory_view, name='inventory'),
     url(r'^inventory/graph/$', views.inventory_graph, name='inventory_graph'),
-    url(r'^inventory/update/$', views.inventory_update, name='inventory_update'),
+    url(r'^inventory/update/$', views.select_product_to_update, name='select_product_to_update'),
 
 ]
 
