@@ -9,12 +9,14 @@
         <th> Name:</th>
         <th> Type:</th>
         <th> Unit Price:</th>
+        <th> Quantity Bought: </th>
     </tr>
     {% for invoice_product in invoices_products %}
     <tr>
         <td> {{ invoice_product.product.name }}</td>
         <td> {{ invoice_product.product.unit_type }}</td>
         <td> {{ invoice_product.product.unit_price }}</td>
+        <td>  {{ invoice_product.total_units }}</td>
     </tr>
     {% endfor %}
 </table>
