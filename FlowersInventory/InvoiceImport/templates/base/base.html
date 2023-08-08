@@ -16,12 +16,12 @@
 <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-
+<!--// jquery for filtering invoices by months-->
 <script>
     $(document).ready(function () {
         // pulling 'invoice-form' in
         var invoiceForm = $('.invoice-form')
-        console.log('inside .ready')
+        // console.log('inside .ready')
 
         invoiceForm.submit(function (event) {
             console.log('inside invoiceForm submit function')
@@ -33,6 +33,7 @@
             var httpMethod = thisForm.attr("method")
             // the form data
             var formData = thisForm.serialize();
+
 
             $.ajax({
                 type: "GET",
@@ -49,7 +50,7 @@
 
         // pulling 'invoices-products-form' in
         var invoiceProductForm = $('.invoices-products-form')
-        console.log('listing to invoiceProductForm')
+        // console.log('listing to invoiceProductForm')
 
         invoiceProductForm.submit(function (event) {
             console.log('inside invoiceProductForm function')
@@ -80,29 +81,69 @@
                 }
             })
         })
+    });
+</script>
 
-        // on click function for updating inventory quantities
-        var selectProductToUpdateForm = $('.select_product_to_update_form')
-        console.log('got form')
+<!--// jquery for updating products in the inventory-->
+<script>
+    $(document).ready(function () {
 
-        document.getElementById("update-button").onclick = function () {
-            selectProductToUpdate()
-            // event.preventDefault()
+        const dropdown = document.getElementById("myDropdown");
+        const hiddenInventoryId = document.getElementById("hidden-product-id");
+        const usedInventory = document.getElementById("used-inventory")
+        const inventoryUpdateForm = $('.inventory-update-form')
+        const form = document.getElementById("inventory-update-form")
 
+        dropdown.addEventListener("change", function (e) {
+            const valueSelected = e.target.value;
+            console.log("here", valueSelected)
+            if (valueSelected === "") {
+                form.hidden = true;
+                hiddenInventoryId.value = ""
 
-        };
+            } else {
+                form.hidden = false;
+                hiddenInventoryId.value = valueSelected
 
-        function selectProductToUpdate(event) {
+            }
+        });
+
+        inventoryUpdateForm.submit(function (event) {
+            // grabbing data related to this form
             event.preventDefault()
+            const thisForm = $(this);
+            // the url
+            const actionEndpoint = thisForm.attr("data-endpoint")
+            // actual method - GET
+            const httpMethod = thisForm.attr("method")
 
-            document.getElementById("update-button").innerHTML = "LET'S DO IT!! ENTER NEW VALUE";
-            document.getElementsByTagName("body")[0].style.color = "white";
-            document.getElementsByTagName("body")[0].style.backgroundColor = "pink";
-            document.getElementById("update-button").style.border = "4px yellow";
+            // the form data
+            const formData = thisForm.serializeArray();
 
-        }
+
+
+            formData.push({name: "inventoryId", value: hiddenInventoryId.value} )
+            formData.push({name: "usedInventory", value: usedInventory.value} )
+            $.ajax({
+                type: "POST",
+                url: actionEndpoint,
+                method: httpMethod,
+                data: formData,
+
+                success: function (data) {
+                    $('#msg').html("Update Successfully").fadeIn('slow');
+                    $('#msg').delay(5000).fadeOut('slow');
+
+                },
+                error: function (response){
+                    $('#msg').html("not enough inventory").fadeIn('slow');
+                    $('#msg').delay(5000).fadeOut('slow');
+                }
+            })
+        })
 
     });
 </script>
+
 </body>
 </html>
