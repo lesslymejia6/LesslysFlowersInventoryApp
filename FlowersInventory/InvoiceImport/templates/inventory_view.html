@@ -2,17 +2,21 @@
 
 
 {% block content %}
-<table border="5px" align="center">
+<table class="table table-striped" align="center">
+    <thead class="thead-dark">
     <tr>
         <th> Name:</th>
         <th> Total Bunches:</th>
     </tr>
+    </thead>
+    <tbody>
     {% for product in products %}
     <tr>
         <td> {{ product.product.name }}</td>
         <td> {{ product.total_units}}</td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 
 <div align="center" style="padding:25px">
