@@ -24,8 +24,28 @@
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Quantity of Bunches',
+                        padding: 30,
+
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Flowers',
+                        padding: 30
+
+                    },
+                    ticks:{
+                        maxRotation: 0,
+                        minRotation: 0,
+                        autoSkip: false,
+                    }
                 }
+
             }
         }
     });
