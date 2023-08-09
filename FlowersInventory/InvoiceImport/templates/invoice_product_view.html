@@ -21,7 +21,7 @@
         <tr>
             <td> {{ invoice_product.product.name }}</td>
             <td> {{ invoice_product.product.unit_type }}</td>
-            <td> {{ invoice_product.product.unit_price }}</td>
+            <td> $ {{ invoice_product.product.unit_price }}</td>
             <td> {{ invoice_product.total_units }}</td>
         </tr>
         {% endfor %}
@@ -29,7 +29,7 @@
              <td style="background-color: lightgray"></td>
             <td style="background-color: lightgray"></td>
             <td style="background-color: lightgray; color: black; font-size: 18px"> TOTAL: </td>
-            <td style="background-color: lightgray"> {{invoice.invoice_total}} </td>
+            <td style="background-color: lightgray"> $ {{invoice.invoice_total}} </td>
         </tr>
         </tbody>
     </table>
