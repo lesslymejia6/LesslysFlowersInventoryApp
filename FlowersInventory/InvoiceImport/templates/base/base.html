@@ -94,8 +94,7 @@
         const inventoryUpdateForm = $('.inventory-update-form')
         const form = document.getElementById("inventory-update-form")
 
-        window.onload = function (){
-            dropdown.addEventListener("change", function (e) {
+        dropdown.addEventListener("change", function (e) {
             const valueSelected = e.target.value;
             console.log("here", valueSelected)
             if (valueSelected === "") {
@@ -108,7 +107,7 @@
 
             }
         });
-        }
+
 
         inventoryUpdateForm.submit(function (event) {
             // grabbing data related to this form
@@ -123,9 +122,8 @@
             const formData = thisForm.serializeArray();
 
 
-
-            formData.push({name: "inventoryId", value: hiddenInventoryId.value} )
-            formData.push({name: "usedInventory", value: usedInventory.value} )
+            formData.push({name: "inventoryId", value: hiddenInventoryId.value})
+            formData.push({name: "usedInventory", value: usedInventory.value})
             $.ajax({
                 type: "POST",
                 url: actionEndpoint,
@@ -137,7 +135,7 @@
                     $('#msg').delay(5000).fadeOut('slow');
 
                 },
-                error: function (response){
+                error: function (response) {
                     $('#msg').html("not enough inventory").fadeIn('slow');
                     $('#msg').delay(5000).fadeOut('slow');
                 }
