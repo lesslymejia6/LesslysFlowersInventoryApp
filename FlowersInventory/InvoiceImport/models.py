@@ -17,6 +17,7 @@ class Invoice(models.Model):
         return "Purchase date: " + str(self.purchase_date)
 
 
+
 class Product(models.Model):
     name            = models.CharField(max_length=300)
     unit_type       = models.CharField(max_length=50, default='bunch', choices=UNIT_TYPE_CHOICES)
