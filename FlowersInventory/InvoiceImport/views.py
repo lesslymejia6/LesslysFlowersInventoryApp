@@ -1,12 +1,8 @@
 import json
-
 from django.shortcuts import render
 import pandas as pd
 from django.core.files.storage import FileSystemStorage
 from .models import Inventory, Product, Invoice, InvoiceProducts
-from tablib import Dataset
-from .resources import InvoiceResource
-from collections import Counter
 
 
 def home_page(request):
@@ -19,18 +15,16 @@ def home_page(request):
 
 def import_page(request):
     if request.method == 'POST' and request.FILES['myfile']:
-
         myfile = request.FILES['myfile']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
         dataframe = pd.read_excel(filename, engine='openpyxl')
 
-
-        invoice_obj = Invoice.objects.create(purchase_date=dataframe.purchase_date[0],
-                                             invoice_total=dataframe.invoice_total[0])
-
-        invoice_obj.save()
+        invoice_object = create_invoice(
+            purchase_date=dataframe.purchase_date[0],
+            invoice_total=dataframe.invoice_total[0]
+        )
 
         for dataframe_row in dataframe.itertuples():
             # checks for empty cells in each dataframe_row
@@ -39,24 +33,11 @@ def import_page(request):
                     (pd.isnull(dataframe_row.unit_price)):
                 continue
 
-            # Check if product exists, if not create it
-            product_obj, created = Product.objects.get_or_create(name=dataframe_row.name,
-                                                                 unit_type=dataframe_row.unit_type,
-                                                                 unit_price=dataframe_row.unit_price)
+            product_object = add_or_create_product(dataframe_row)
 
-            # Add product to inventory
-            inventory_obj, created = Inventory.objects.get_or_create(product=product_obj)
-            inventory_obj.total_units += dataframe_row.total_units
-            inventory_obj.save()
+            add_product_to_inventory(dataframe_row, product_object)
 
-            # updating InvoiceProducts model
-            total_units = dataframe_row.total_units
-            invoice_product = InvoiceProducts(
-                product=product_obj,
-                invoice=invoice_obj,
-                total_units=total_units
-            )
-            invoice_product.save()
+            updating_invoice_product_model(dataframe_row, product_object, invoice_object)
 
         context = {
             'uploaded_file_url': uploaded_file_url,
@@ -66,24 +47,46 @@ def import_page(request):
     return render(request, 'import_view.html', {})
 
 
-def invoice_import(request):
-    if request.method == 'POST':
-        InvoiceResource()
-        dataset = Dataset()
-        new_invoice = request.FILES['myfile']
-        data_import = dataset.load(new_invoice.read())
-        result = InvoiceResource.import_data(dataset, dry_run=True)
-        if not result.has_errors():
-            InvoiceResource.import_data(dataset, dry_run=False)
-    return render(request, 'import_success.html', {})
+def create_invoice(purchase_date, invoice_total):
+    invoice_obj = Invoice.objects.create(purchase_date=purchase_date,
+                                         invoice_total=invoice_total)
+
+    invoice_obj.save()
+
+    return invoice_obj
+
+
+def add_or_create_product(dataframe_row):
+    # Check if product exists, if not create it
+    product_obj, created = Product.objects.get_or_create(name=dataframe_row.name,
+                                                         unit_type=dataframe_row.unit_type,
+                                                         unit_price=dataframe_row.unit_price)
+
+    return product_obj
+
+
+def updating_invoice_product_model(dataframe_row, product_object, invoice_object):
+    # updating InvoiceProducts model
+    total_units = dataframe_row.total_units
+    invoice_product = InvoiceProducts(
+        product=product_object,
+        invoice=invoice_object,
+        total_units=total_units
+    )
+    invoice_product.save()
+
+
+def add_product_to_inventory(dataframe_row, product_object):
+    # Add product to inventory
+    inventory_obj, created = Inventory.objects.get_or_create(product=product_object)
+    inventory_obj.total_units += dataframe_row.total_units
+    inventory_obj.save()
 
 
 def invoices_view(request):
     month_str = request.GET.get('monthSelect', None)
     if month_str is not None:
-        print(type(month_str))
         month_int = int(month_str)
-        print(type(month_int))
 
         # filter by the month
         invoices_qs = Invoice.objects.filter(
@@ -108,7 +111,6 @@ def invoices_products_view(request):
     else:
         invoices_products = InvoiceProducts.objects.none()
 
-    # print(product_inventory)
     context = {
         'invoice': invoice,
         'invoices_products': invoices_products,
@@ -140,9 +142,6 @@ def inventory_graph(request):
         labels.append(inventory.product.name)
         data.append(inventory.total_units)
 
-    print(labels)
-    print(data)
-
     context = {
         "labels": json.dumps(labels),
         "data": json.dumps(data),
@@ -151,22 +150,26 @@ def inventory_graph(request):
 
 
 def select_product_to_update(request):
-    print(request.body)
     inventory_queryset = Inventory.objects.all()
     used_inventory = request.POST.get('usedInventory', None)
     inventory_id = request.POST.get('inventoryId', None)
-    if inventory_id and used_inventory:
-        inventory_instance = Inventory.objects.get(id=inventory_id)
-        total_units_available = inventory_instance.total_units
-        # Check if inventory has enough else raise exception
-        if total_units_available > int(used_inventory):
-            inventory_instance.total_units = inventory_instance.total_units - int(used_inventory)
-        else:
-            raise ValueError("Not enough inventory to use")
 
-        inventory_instance.save()
+    if inventory_id and used_inventory:
+        check_if_inventory_has_enough_units(used_inventory, inventory_id)
 
     context = {
         'inventory_queryset': inventory_queryset
     }
     return render(request, "inventory_update_view.html", context)
+
+
+def check_if_inventory_has_enough_units(used_inventory, inventory_id):
+    inventory_instance = Inventory.objects.get(id=inventory_id)
+    total_units_available = inventory_instance.total_units
+    # Check if inventory has enough else raise exception
+    if total_units_available >= int(used_inventory):
+        inventory_instance.total_units = inventory_instance.total_units - int(used_inventory)
+    else:
+        raise ValueError("Not enough inventory to use")
+
+    inventory_instance.save()
