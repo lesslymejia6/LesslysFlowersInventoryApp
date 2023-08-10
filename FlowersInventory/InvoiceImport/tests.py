@@ -1,10 +1,10 @@
 from django.test import TestCase
-from .models import Invoice, Product, InvoiceProducts, Inventory
+from .models import Invoice, Product, InvoiceProducts
 import pandas as pd
 from decimal import Decimal
 from datetime import date
 
-from .views import create_invoice, add_or_create_product, add_product_to_inventory, updating_invoice_product_model, \
+from .views import create_invoice, add_or_create_product, updating_invoice_product_model, \
     check_if_inventory_has_enough_units
 
 
@@ -82,41 +82,6 @@ class ViewsTestCase(TestCase):
             single_product.unit_price, unit_price
         )
 
-    def test_add_product_to_inventory(self):
-        # ARRANGE
-        total_units = 5
-
-        d = {
-            'total_units': [total_units],
-        }
-        dataframe = pd.DataFrame(data=d)
-
-        product_object = Product(name='roses', unit_type='bunch', unit_price=24.99)
-        product_object.save()
-        # ACT
-        for dataframe_row in dataframe.itertuples():
-            add_product_to_inventory(dataframe_row, product_object)
-
-        # ASSERT
-        inventory_qs = Inventory.objects.all()
-
-        first_inventory_qs = inventory_qs.filter(
-            total_units=total_units
-        )
-
-        self.assertEquals(
-            inventory_qs.count(), 1
-        )
-
-        single_inventory = first_inventory_qs.get()
-        self.assertEquals(
-            single_inventory.product, product_object
-        )
-
-        self.assertEquals(
-            single_inventory.total_units, total_units
-        )
-
     def test_updating_invoice_product_model(self):
         # ARRANGE
         total_units = 5
@@ -166,17 +131,15 @@ class ViewsTestCase(TestCase):
         used_inventory = 2
         used_inventory_gt_available_inventory = 7
 
-        product_object = Product(name='roses', unit_type='bunch', unit_price=24.99)
+        product_object = Product(name='roses', unit_type='bunch', unit_price=24.99, total_units=5)
         product_object.save()
 
-        inventory_object = Inventory(product=product_object, total_units=5)
-        inventory_object.save()
         # ACT
         if inventory_id and used_inventory:
             check_if_inventory_has_enough_units(used_inventory, inventory_id)
 
         # ASSERT
-        inventory_qs = Inventory.objects.all()
+        inventory_qs = Product.objects.all()
 
         first_inventory_qs = inventory_qs.filter(
             id=inventory_id
