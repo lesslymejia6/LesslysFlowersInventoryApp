@@ -18,8 +18,6 @@ from FlowersInventory import settings
 from django.conf.urls.static import static
 from . import views
 
-# from .views import home_page, inventory_page, inventory_import, data_charts, month_selection
-
 app_name = 'InvoiceImport'
 
 urlpatterns = [
@@ -27,8 +25,8 @@ urlpatterns = [
     url(r'^import/$', views.import_page, name='import'),
     url(r'^invoices/$', views.invoices_view, name="invoices"),
     url(r'^invoices/products/$', views.invoices_products_view, name='invoice_product'),
-    url(r'^inventory/$', views.inventory_view, name='inventory'),
-    url(r'^inventory/graph/$', views.inventory_graph, name='inventory_graph'),
+    url(r'^inventory/$', views.products_inventory_view, name='inventory'),
+    url(r'^inventory/graph/$', views.products_inventory_as_list_view, name='inventory_graph'),
     url(r'^inventory/update/$', views.select_product_to_update, name='select_product_to_update'),
 
 ]
