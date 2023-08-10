@@ -1,12 +1,13 @@
+<label for="myDropdown">Update Inventory</label>
 <select id="myDropdown" class="form-select" name="dropdown">
     <option selected value="">Select Product</option>
-    {% for inventory_instance in inventory_queryset %}
-    <option value={{inventory_instance.id}}>{{inventory_instance.product.name}}</option>
+    {% for product_instance in products_queryset %}
+    <option value={{product_instance.id}}>{{product_instance.name}}</option>
     {% endfor %}
 </select>
 
- <div id='msg'></div>
-<form hidden class="inventory-update-form" method="POST" action='{% url "import:select_product_to_update" %}'
+<div id='msg'></div>
+<form hidden class="inventory-update-form" method="POST"
       data-endpoint='{% url "import:select_product_to_update" %}' id="inventory-update-form">
     {% csrf_token %}
 
