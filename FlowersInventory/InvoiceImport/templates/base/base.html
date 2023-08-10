@@ -89,7 +89,7 @@
     $(document).ready(function () {
 
         const dropdown = document.getElementById("myDropdown");
-        const hiddenInventoryId = document.getElementById("hidden-product-id");
+        const hiddenProductId = document.getElementById("hidden-product-id");
         const usedInventory = document.getElementById("used-inventory")
         const inventoryUpdateForm = $('.inventory-update-form')
         const form = document.getElementById("inventory-update-form")
@@ -99,11 +99,11 @@
             console.log("here", valueSelected)
             if (valueSelected === "") {
                 form.hidden = true;
-                hiddenInventoryId.value = ""
+                hiddenProductId.value = ""
 
             } else {
                 form.hidden = false;
-                hiddenInventoryId.value = valueSelected
+                hiddenProductId.value = valueSelected
 
             }
         });
@@ -122,7 +122,7 @@
             const formData = thisForm.serializeArray();
 
 
-            formData.push({name: "inventoryId", value: hiddenInventoryId.value})
+            formData.push({name: "productId", value: hiddenProductId.value})
             formData.push({name: "usedInventory", value: usedInventory.value})
             $.ajax({
                 type: "POST",
