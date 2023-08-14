@@ -6,16 +6,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('myChart').getContext('2d');
-    const data = JSON.parse("{{ data|escapejs }}")
-    const labels = JSON.parse("{{ labels|escapejs}}")
-    console.log({data, labels})
+    const product_total_units = JSON.parse("{{ product_total_units|escapejs }}")
+    const product_names = JSON.parse("{{ product_names|escapejs}}")
+    console.log({product_total_units, product_names})
     const myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: product_names,
             datasets: [{
                 label: "Inventory",
-                data: data,
+                data: product_total_units,
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1

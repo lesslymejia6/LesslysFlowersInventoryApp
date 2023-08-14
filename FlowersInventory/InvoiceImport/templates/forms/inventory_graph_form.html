@@ -1,5 +1,5 @@
 <form class="inventory-graph-form" method="GET" action='{% url "import:inventory_graph" %}' data-endpoint='{% url "import:inventory_graph" %}'
-      class="form" name="invoiceForm">
+      name="invoiceForm">
     {% csrf_token %}
     <button type="submit" class="btn btn-success">View Graph</button>
 </form>
