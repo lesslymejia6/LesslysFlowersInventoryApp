@@ -2,9 +2,44 @@
 
 
 {% block content %}
-    <div class = 'text-center'>
-        <p> Bienvenidos! </p>
-        <h1> Welcome </h1>
-    </div>
+<div class='text-center'>
+    <p> Welcome! </p>
 
+    <h5> This is what flowers we have for today.</h5>
+</div>
+
+<canvas id="myLineChart" width="800" height="400"></canvas>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js'></script>
+<script>
+
+    console.log("inside script for pie chart")
+    const ctx = document.getElementById('myLineChart').getContext('2d');
+    const product_total_units = JSON.parse("{{ product_total_units|escapejs }}")
+    const product_names = JSON.parse("{{ product_names|escapejs}}")
+
+    console.log({product_total_units, product_names})
+    const myLineChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: product_names,
+            datasets: [{
+                label: "Inventory",
+                data: product_total_units,
+                backgroundColor: ["rgba(255, 0, 45, 0.5)", "rgba(100, 23, 0, 0.5)", "rgba(200, 50, 332, 0.5)",
+                    "rgba(0, 4, 255, 0.5)", "rgba(0,455,333, 05)", "rgba(65, 123, 10, 4.5)", "rgba(34,35,78,6)"]
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Flowers'
+            },
+            color: {
+                forceOverride: true
+
+            }
+
+        }
+    });
+</script>
 {% endblock %}
