@@ -11,5 +11,6 @@
     <orderEntry type="library" name="chart.js" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
     <orderEntry type="library" name="chart.js" level="application" />
+    <orderEntry type="library" name="palette" level="application" />
   </component>
 </module>
