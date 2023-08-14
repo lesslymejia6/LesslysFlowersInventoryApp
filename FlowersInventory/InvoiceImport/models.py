@@ -20,7 +20,7 @@ class Invoice(models.Model):
 class Product(models.Model):
     name            = models.CharField(max_length=300)
     unit_type       = models.CharField(max_length=50, default='bunch', choices=UNIT_TYPE_CHOICES)
-    unit_price      = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price      = models.DecimalField(max_digits=6, decimal_places=2, null=False)
     total_units     = models.IntegerField(default=0)
 
     def __str__(self):
