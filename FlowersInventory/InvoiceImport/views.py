@@ -2,14 +2,12 @@ import json
 from django.shortcuts import render
 import pandas as pd
 from django.core.files.storage import FileSystemStorage
-from .models import Inventory, Product, Invoice, InvoiceProducts
+from .models import Product, Invoice, InvoiceProducts
 
 
 def home_page(request):
     greeting = 'HIIIII '
-    context = {
-        'greeting': greeting
-    }
+    context = get_products_inventory()
     return render(request, "home.html", context)
 
 
@@ -56,9 +54,14 @@ def create_invoice(purchase_date, invoice_total):
 
 def add_or_create_product(dataframe_row):
     # Check if product exists, if not create it
-    product_obj, created = Product.objects.get_or_create(name=dataframe_row.name,
-                                                         unit_type=dataframe_row.unit_type,
+    product_obj, created = Product.objects.get_or_create(name=dataframe_row.name, unit_type=dataframe_row.unit_type,
                                                          unit_price=dataframe_row.unit_price)
+
+    available_total_units = product_obj.total_units
+
+    product_obj.total_units = available_total_units + dataframe_row.total_units
+
+    product_obj.save()
 
     return product_obj
 
@@ -114,7 +117,7 @@ def get_invoice_products_as_list_view(invoice_id):
     else:
         invoices_products = InvoiceProducts.objects.none()
 
-    return invoices_products,
+    return invoices_products
 
 
 def products_inventory_view(request):
@@ -129,7 +132,7 @@ def products_inventory_view(request):
 
 def products_inventory_as_list_view(request):
     context = get_products_inventory()
-    print(context)
+    # print(context)
     return render(request, "inventory_graph.html", context)
 
 
