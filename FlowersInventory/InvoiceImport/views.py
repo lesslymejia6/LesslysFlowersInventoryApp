@@ -35,8 +35,6 @@ def import_page(request):
 
             product_object = add_or_create_product(dataframe_row)
 
-            add_product_to_inventory(dataframe_row, product_object)
-
             updating_invoice_product_model(dataframe_row, product_object, invoice_object)
 
         context = {
