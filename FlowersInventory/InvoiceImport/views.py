@@ -76,13 +76,6 @@ def updating_invoice_product_model(dataframe_row, product_object, invoice_object
     invoice_product.save()
 
 
-def add_product_to_inventory(dataframe_row, product_object):
-    # Add product to inventory
-    inventory_obj, created = Inventory.objects.get_or_create(product=product_object)
-    inventory_obj.total_units += dataframe_row.total_units
-    inventory_obj.save()
-
-
 def invoices_view(request):
     month_str = request.GET.get('monthSelect', None)
     if month_str is not None:
