@@ -152,15 +152,15 @@ def get_products_inventory():
 
 
 def select_product_to_update(request):
-    inventory_queryset = Inventory.objects.all()
-    used_inventory = request.POST.get('usedInventory', None)
-    inventory_id = request.POST.get('inventoryId', None)
+    products_queryset = Product.objects.all()
+    used_product = request.POST.get('usedInventory', None)
+    product_id = request.POST.get('productId', None)
 
-    if inventory_id and used_inventory:
-        check_if_inventory_has_enough_units(used_inventory, inventory_id)
+    if product_id and used_product:
+        check_if_inventory_has_enough_units(used_product, product_id)
 
     context = {
-        'inventory_queryset': inventory_queryset
+        'products_queryset': products_queryset
     }
     return render(request, "inventory_update_view.html", context)
 
