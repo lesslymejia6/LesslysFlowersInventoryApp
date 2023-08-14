@@ -103,13 +103,7 @@ def invoices_products_view(request):
     invoice_id = request.GET.get('invoice_id', None)
     invoice = Invoice.objects.get(id=invoice_id)
 
-    # product_inventory = []
-    if invoice_id is not None:
-
-        invoices_products = InvoiceProducts.objects.filter(invoice_id=invoice_id)
-
-    else:
-        invoices_products = InvoiceProducts.objects.none()
+    invoices_products = get_invoice_products_as_list_view(invoice_id)
 
     context = {
         'invoice': invoice,
@@ -121,32 +115,49 @@ def invoices_products_view(request):
     return render(request, "invoice_product_view.html", context)
 
 
-def inventory_view(request):
-    products = Inventory.objects.all()
+def get_invoice_products_as_list_view(invoice_id):
+    if invoice_id is not None:
+
+        invoices_products = InvoiceProducts.objects.filter(invoice_id=invoice_id)
+
+    else:
+        invoices_products = InvoiceProducts.objects.none()
+
+    return invoices_products,
+
+
+def products_inventory_view(request):
+    products = Product.objects.all()
 
     context = {
-        # 'product_inventory': product_inventory,
-        'products': products
+        'products': products,
     }
 
     return render(request, "inventory_view.html", context)
 
 
-def inventory_graph(request):
-    labels = []
-    data = []
-
-    queryset = Inventory.objects.order_by('total_units')
-
-    for inventory in queryset:
-        labels.append(inventory.product.name)
-        data.append(inventory.total_units)
-
-    context = {
-        "labels": json.dumps(labels),
-        "data": json.dumps(data),
-    }
+def products_inventory_as_list_view(request):
+    context = get_products_inventory()
+    print(context)
     return render(request, "inventory_graph.html", context)
+
+
+def get_products_inventory():
+    product_names = []
+    product_total_units = []
+
+    queryset = Product.objects.order_by('total_units')
+
+    for product in queryset:
+        product_names.append(product.name)
+        product_total_units.append(product.total_units)
+
+    payload = {
+        "product_names": json.dumps(product_names),
+        "product_total_units": json.dumps(product_total_units),
+    }
+
+    return payload
 
 
 def select_product_to_update(request):
@@ -163,13 +174,13 @@ def select_product_to_update(request):
     return render(request, "inventory_update_view.html", context)
 
 
-def check_if_inventory_has_enough_units(used_inventory, inventory_id):
-    inventory_instance = Inventory.objects.get(id=inventory_id)
-    total_units_available = inventory_instance.total_units
+def check_if_inventory_has_enough_units(used_product, product_id):
+    product_instance = Product.objects.get(id=product_id)
+    total_units_available = product_instance.total_units
     # Check if inventory has enough else raise exception
-    if total_units_available >= int(used_inventory):
-        inventory_instance.total_units = inventory_instance.total_units - int(used_inventory)
+    if total_units_available >= int(used_product):
+        product_instance.total_units = product_instance.total_units - int(used_product)
     else:
         raise ValueError("Not enough inventory to use")
 
-    inventory_instance.save()
+    product_instance.save()
