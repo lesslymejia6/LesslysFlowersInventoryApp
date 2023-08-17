@@ -1,44 +1,51 @@
 {% extends "base/base.html" %}
 
-
 {% block content %}
 <div class='text-center'>
     <p> Welcome! </p>
 
-    <h5> This is what flowers we have for today.</h5>
+    <h2> AVAILABLE FLOWERS FOR TODAY: </h2>
 </div>
 
-<canvas id="myLineChart" width="800" height="400"></canvas>
+<canvas id="myDoughnutChart" width="800" height="400"></canvas>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js'></script>
 <script>
 
     console.log("inside script for pie chart")
-    const ctx = document.getElementById('myLineChart').getContext('2d');
+
+    const ctx = document.getElementById('myDoughnutChart').getContext('2d');
     const product_total_units = JSON.parse("{{ product_total_units|escapejs }}")
     const product_names = JSON.parse("{{ product_names|escapejs}}")
 
+    function getRandomColor() {
+        let letters = '0123456789ABCDEF'.split('');
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    var bg_colors = product_total_units.map(item => getRandomColor())
+
     console.log({product_total_units, product_names})
-    const myLineChart = new Chart(ctx, {
+
+    const myDoughnutChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: product_names,
             datasets: [{
                 label: "Inventory",
                 data: product_total_units,
-                backgroundColor: ["rgba(255, 0, 45, 0.5)", "rgba(100, 23, 0, 0.5)", "rgba(200, 50, 332, 0.5)",
-                    "rgba(0, 4, 255, 0.5)", "rgba(0,455,333, 05)", "rgba(65, 123, 10, 4.5)", "rgba(34,35,78,6)"]
+                backgroundColor: bg_colors
             }]
         },
         options: {
-            title: {
-                display: true,
-                text: 'Flowers'
-            },
-            color: {
-                forceOverride: true
-
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
-
         }
     });
 </script>
