@@ -50,11 +50,13 @@ class ViewsTestCase(TestCase):
         name = 'peonies'
         unit_type = 'bunch'
         unit_price = Decimal('18.56')
+        total_units = 3
 
         d = {
             'name': [name],
             'unit_type': [unit_type],
-            'unit_price': [unit_price]
+            'unit_price': [unit_price],
+            'total_units': [total_units]
         }
         dataframe = pd.DataFrame(data=d)
         # ACT
