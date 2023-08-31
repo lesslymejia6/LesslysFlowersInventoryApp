@@ -25,7 +25,9 @@ SECRET_KEY = '=4^z6-%y*mhfvxrw-q4djt$*^1nfpe8uk0&x2zanlv+8h!q6rb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '0.0.0.0'
+]
 
 
 # Application definition
@@ -82,8 +84,8 @@ DATABASES = {
         'NAME': 'postgres',
         'PASSWORD': 'S3cret',
         'USER': 'citizix_user',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
