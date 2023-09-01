@@ -1,0 +1,4 @@
+<form class="inventory-form" method="GET" action='{% url "import:inventory" %}' data-endpoint='{% url "import:inventory" %}'
+      name="inventoryForm">
+    {% csrf_token %}
+</form>
