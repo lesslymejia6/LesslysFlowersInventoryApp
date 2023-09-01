@@ -37,7 +37,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 # Application definition
 
 INSTALLED_APPS = [
-    'flowersinventory.apps.flowersinventoryConfig',
+    'InvoiceImport.apps.InvoiceImportConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
