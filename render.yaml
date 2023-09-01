@@ -1,18 +1,18 @@
 databases:
-  - name: FlowersInventory
-    databaseName: FlowersInventory
-    user: FlowersInventory
+  - name: flowersinventory
+    databaseName: flowersinventory
+    user: flowersinventory
 
 services:
   - type: web
-    name: FlowersInventory
+    name: flowersinventory
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn FlowersInventory.wsgi:application"
+    startCommand: "gunicorn flowersinventory.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: FlowersInventory
+          name: flowersinventory
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
