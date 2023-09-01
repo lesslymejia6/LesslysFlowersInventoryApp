@@ -15,8 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from FlowersInventory import settings
-from django.conf.urls.static import static
 from django.urls import include
 # from InvoiceImport.views import home_page, inventory_page, inventory_import, data_charts, month_selection
 
