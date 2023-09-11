@@ -22,7 +22,8 @@ app_name = 'InvoiceImport'
 
 urlpatterns = [
     url(r'^$', views.home_page, name='home'),
-    url(r'^import/$', views.import_page, name='import'),
+    # disabled import to not have issues with incorrect xcel file formats
+    # url(r'^import/$', views.import_page, name='import'),
     url(r'^invoices/$', views.invoices_view, name="invoices"),
     url(r'^invoices/products/$', views.invoices_products_view, name='invoice_product'),
     url(r'^inventory/$', views.products_inventory_view, name='inventory'),
